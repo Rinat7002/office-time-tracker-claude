@@ -11,9 +11,9 @@ const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 const DAY_LABELS = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 const DEPARTURE_OFFSETS = [
-  { minutes: 8 * 60, label: 'Уход через 8 ч' },
-  { minutes: 8 * 60 + 30, label: 'Уход через 8 ч 30 мин' },
-  { minutes: 9 * 60, label: 'Уход через 9 ч' }
+  { minutes: 8 * 60, label: 'Уход через 8 ч', tone: 'danger' },
+  { minutes: 8 * 60 + 30, label: 'Уход через 8 ч 30 мин', tone: 'success' },
+  { minutes: 9 * 60, label: 'Уход через 9 ч', tone: 'warn' }
 ];
 const MONTH_LABELS = [
   'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
@@ -207,7 +207,7 @@ const UI = {
     this.el.departureResults.innerHTML = DEPARTURE_OFFSETS.map((offset) => {
       const result = Timer.addMinutesToTimeString(arrivalTimeStr, offset.minutes);
       return `
-        <div class="departure-card">
+        <div class="departure-card tone-${offset.tone}">
           <div class="duration-label">${offset.label}</div>
           <div class="duration-value">${result.time}</div>
           ${result.nextDay ? '<div class="next-day-note">на следующий день</div>' : ''}
