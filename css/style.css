@@ -1,0 +1,718 @@
+/* ============================================================
+   Office Time Tracker — стили
+   Тема: "карточка учёта времени" — латунный акцент на графитовом
+   фоне, цифры в моноширинном шрифте, как на механическом табло.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: #10131a;
+  --surface: #181c24;
+  --surface-2: #1f242e;
+  --border: #2a2f3a;
+  --text: #eef0f3;
+  --text-secondary: #8b93a3;
+  --text-faint: #5a6270;
+  --accent: #e0a458;
+  --accent-strong: #f0b96f;
+  --accent-soft: rgba(224, 164, 88, 0.14);
+  --success: #6bbf9a;
+  --success-soft: rgba(107, 191, 154, 0.14);
+  --danger: #e2665a;
+  --danger-soft: rgba(226, 102, 90, 0.14);
+  --ring-track: #262b35;
+
+  --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='light'] {
+  --background: #f3f1ec;
+  --surface: #ffffff;
+  --surface-2: #f7f5f0;
+  --border: #e4e0d6;
+  --text: #201d18;
+  --text-secondary: #6b6558;
+  --text-faint: #a49d8c;
+  --accent: #c07a2e;
+  --accent-strong: #a8661f;
+  --accent-soft: rgba(192, 122, 46, 0.12);
+  --success: #2f8f66;
+  --success-soft: rgba(47, 143, 102, 0.12);
+  --danger: #c14a3d;
+  --danger-soft: rgba(193, 74, 61, 0.12);
+  --ring-track: #e9e5da;
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 10px 24px rgba(60, 50, 30, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .25s ease, color .25s ease;
+  padding-bottom: 48px;
+}
+
+button {
+  font-family: inherit;
+}
+
+.app-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- Верхняя панель ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.brand-mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+  flex: none;
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.clock-live {
+  text-align: right;
+  line-height: 1.25;
+}
+
+.clock-live .date {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.clock-live .time {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: border-color .15s ease, transform .15s ease;
+}
+
+.icon-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+.icon-btn:active { transform: translateY(0); }
+
+/* ---------- Навигация по вкладкам ---------- */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 5px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background .15s ease, color .15s ease;
+}
+
+.tab-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fade-in .25s ease; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Главный экран ---------- */
+
+.hero-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-card);
+  padding: 36px 28px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-status {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 22px;
+}
+
+.hero-status.state-working { color: var(--accent); }
+.hero-status.state-break { color: var(--success); }
+.hero-status.state-finished { color: var(--success); }
+.hero-status.state-overtime { color: var(--danger); }
+
+/* Кольцо прогресса — сигнатурный элемент: как латунный циферблат
+   настольных часов, с делениями по кругу. */
+.ring-wrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin-bottom: 10px;
+}
+
+.ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.ring-track {
+  fill: none;
+  stroke: var(--ring-track);
+  stroke-width: 10;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke .3s ease;
+}
+
+.ring-progress.state-break { stroke: var(--success); }
+.ring-progress.state-finished { stroke: var(--success); }
+.ring-progress.state-overtime { stroke: var(--danger); }
+
+.ring-tick {
+  stroke: var(--text-faint);
+  stroke-width: 2;
+  opacity: 0.5;
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ring-countdown {
+  font-family: var(--font-mono);
+  font-size: 42px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.ring-caption {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  max-width: 160px;
+  line-height: 1.35;
+}
+
+.hero-progress-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 14px 0 26px;
+}
+
+.hero-progress-label strong { color: var(--text); font-weight: 600; }
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-s);
+  padding: 13px 22px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .12s ease, filter .15s ease, opacity .15s ease;
+  min-height: 46px;
+}
+
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.btn-primary { background: var(--accent); color: #1a1305; }
+[data-theme='light'] .btn-primary { color: #2a1a05; }
+.btn-secondary { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+.btn-success { background: var(--success); color: #06231a; }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger-soft); }
+
+/* ---------- Главная: калькулятор времени ухода ---------- */
+
+.arrival-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-card);
+  padding: 28px 24px 26px;
+}
+
+.time-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.time-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  color: var(--text);
+  padding: 14px 14px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  /* прячем нативную иконку часов у Chrome/Edge — своя кнопка справа */
+  -webkit-appearance: none;
+}
+
+.time-input::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.time-input {
+  position: relative;
+}
+
+.btn-pick {
+  flex: none;
+  white-space: nowrap;
+  padding: 0 20px;
+}
+
+.departure-results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.departure-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 16px 14px;
+  text-align: center;
+  transition: border-color .15s ease;
+}
+
+.departure-card .duration-label {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+.departure-card .duration-value {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.departure-card .next-day-note {
+  margin-top: 6px;
+  font-size: 10.5px;
+  color: var(--text-faint);
+}
+
+.departure-empty {
+  grid-column: 1 / -1;
+  padding: 26px 10px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+}
+
+/* ---------- Карточки-показатели ---------- */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 16px;
+}
+
+.stat-card .label {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.stat-card .value {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- История ---------- */
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.history-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+}
+
+table.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.history-table th, .history-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.history-table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.history-table td.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.history-table tr:last-child td { border-bottom: none; }
+
+.status-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* ---------- Статистика ---------- */
+
+.stat-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 20px 18px 14px;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 160px;
+  margin-top: 8px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 6px;
+}
+
+.bar {
+  width: 100%;
+  max-width: 26px;
+  border-radius: 6px 6px 3px 3px;
+  background: var(--accent);
+  transition: height .35s ease;
+}
+
+.bar.is-target {
+  background: var(--surface-2);
+  border: 1px dashed var(--border);
+}
+
+.bar-label {
+  font-size: 10px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+/* ---------- Настройки (модальное окно) ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 12, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 26px 24px 22px;
+  transform: translateY(10px) scale(.98);
+  transition: transform .2s ease;
+}
+
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 { font-size: 17px; margin: 0; }
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 7px;
+}
+
+.field input[type="time"],
+.field input[type="number"] {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+  color: var(--text);
+  padding: 11px 12px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.field input:focus, .tab-btn:focus-visible, .btn:focus-visible, .icon-btn:focus-visible, .day-chip input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.days-row {
+  display: flex;
+  gap: 6px;
+}
+
+.day-chip {
+  flex: 1;
+  position: relative;
+}
+
+.day-chip input { position: absolute; opacity: 0; }
+
+.day-chip span {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: var(--radius-s);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.day-chip input:checked + span {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.modal-actions .btn { flex: 1; }
+
+/* ---------- Уведомление о разрешении ---------- */
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 13px 18px;
+  border-radius: var(--radius-m);
+  font-size: 13.5px;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 60;
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+
+/* ---------- Адаптивность ---------- */
+
+@media (max-width: 640px) {
+  .app-shell { padding: 0 14px; }
+
+  .topbar { padding: 16px 0 14px; }
+  .brand-name { font-size: 16px; }
+  .clock-live .time { font-size: 14px; }
+
+  .hero-card { padding: 26px 16px 24px; border-radius: var(--radius-m); }
+  .ring-wrap { width: 210px; height: 210px; }
+  .ring-countdown { font-size: 34px; }
+
+  .stat-grid, .stat-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .arrival-card { padding: 22px 16px 20px; border-radius: var(--radius-m); }
+  .time-input-row { flex-direction: column; }
+  .time-input { font-size: 20px; text-align: center; }
+  .btn-pick { width: 100%; }
+  .departure-results { grid-template-columns: 1fr; }
+
+  .hero-actions { flex-direction: column; width: 100%; }
+  .hero-actions .btn { width: 100%; }
+
+  .history-table-wrap { overflow-x: auto; }
+  table.history-table { min-width: 520px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
